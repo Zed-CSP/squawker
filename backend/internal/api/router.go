@@ -1,43 +1,56 @@
 package api
 
 import (
-    "github.com/gin-gonic/gin"
-    "squawker-backend/internal/controllers"
+	"squawker-backend/internal/controllers"
+	"squawker-backend/internal/middleware"
+	"squawker-backend/internal/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
-    router := gin.Default()
+	router := gin.Default()
 
-    // Enable CORS
-    router.Use(func(c *gin.Context) {
-        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-        c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        
-        if c.Request.Method == "OPTIONS" {
-            c.AbortWithStatus(204)
-            return
-        }
-        
-        c.Next()
-    })
+	// Global middleware
+	router.Use(middleware.ErrorHandler())
 
-    userController := controllers.NewUserController()
-    messageController := controllers.NewMessageController()
+	// CORS middleware
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-    router.Use(gin.Logger())
-    router.Use(gin.Recovery())
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
 
-    // User routes
-    router.POST("/register", userController.Register)
-    router.POST("/login", userController.Login)
+		c.Next()
+	})
 
-    // Message routes
-    api := router.Group("/api")
-    {
-        api.GET("/messages", messageController.GetMessages)
-        api.POST("/messages", messageController.CreateMessage)
-    }
-    
-    return router
+	messageController := controllers.NewMessageController()
+	userController := controllers.NewUserController()
+
+	// Public routes with validation
+	router.POST("/register",
+		middleware.ValidateRequest(models.RegisterRequest{}),
+		userController.Register,
+	)
+	router.POST("/login",
+		middleware.ValidateRequest(models.LoginRequest{}),
+		userController.Login,
+	)
+
+	// Protected routes
+	api := router.Group("/api")
+	api.Use(middleware.AuthMiddleware())
+	{
+		api.GET("/messages", messageController.GetMessages)
+		api.POST("/messages",
+			middleware.ValidateRequest(models.CreateMessageRequest{}),
+			messageController.CreateMessage,
+		)
+	}
+
+	return router
 }

@@ -27,7 +27,7 @@ func (s *MessageService) GetMessages() ([]Message, error) {
 		ORDER BY m.created_at DESC
 		LIMIT 100
 	`
-	
+
 	rows, err := database.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -62,11 +62,11 @@ func (s *MessageService) CreateMessage(userID int, content string) error {
 		WHERE user_id = $1 
 		AND post_date = CURRENT_DATE
 	`).Scan(&count)
-	
+
 	if err != nil {
 		return err
 	}
-	
+
 	if count > 0 {
 		return ErrDailyPostLimitExceeded
 	}
@@ -83,7 +83,7 @@ func (s *MessageService) CreateMessage(userID int, content string) error {
 		INSERT INTO messages (user_id, content)
 		VALUES ($1, $2)
 	`, userID, content)
-	
+
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (s *MessageService) CreateMessage(userID int, content string) error {
 		ON CONFLICT (user_id, post_date) 
 		DO UPDATE SET post_count = daily_posts.post_count + 1
 	`, userID)
-	
+
 	if err != nil {
 		return err
 	}
