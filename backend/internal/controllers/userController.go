@@ -1,28 +1,32 @@
 package controllers
 
 import (
-    "github.com/gin-gonic/gin"
-    "net/http"
-    "squawker-backend/internal/services"
+	"net/http"
+	"squawker-backend/internal/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 // UserController struct to attach user methods
-type UserController struct{}
+type UserController struct {
+	service *services.UserService
+}
 
 // NewUserController creates a new controller
 func NewUserController() *UserController {
-    return &UserController{}
+	return &UserController{
+		service: services.NewUserService(),
+	}
 }
 
 // Register handles user registration
-func (ctrl UserController) Register(c *gin.Context) {
-    // Call to service layer
-    // Assume registration logic is performed and responds accordingly
-    c.JSON(http.StatusOK, gin.H{"message": "Registration successful"})
+func (ctrl *UserController) Register(c *gin.Context) {
+	// TODO: Implement user registration
+	c.JSON(http.StatusOK, gin.H{"message": "Registration endpoint"})
 }
 
 // Login handles user login
-func (ctrl UserController) Login(c *gin.Context) {
-    // Assume login logic is performed and responds accordingly
-    c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+func (ctrl *UserController) Login(c *gin.Context) {
+	// TODO: Implement user login
+	c.JSON(http.StatusOK, gin.H{"message": "Login endpoint"})
 }

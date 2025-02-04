@@ -7,6 +7,21 @@ import (
 
 func SetupRouter() *gin.Engine {
     router := gin.Default()
+
+    // Enable CORS
+    router.Use(func(c *gin.Context) {
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        
+        if c.Request.Method == "OPTIONS" {
+            c.AbortWithStatus(204)
+            return
+        }
+        
+        c.Next()
+    })
+
     userController := controllers.NewUserController()
     messageController := controllers.NewMessageController()
 
@@ -18,8 +33,11 @@ func SetupRouter() *gin.Engine {
     router.POST("/login", userController.Login)
 
     // Message routes
-    router.GET("/messages", messageController.GetMessages)
-    router.POST("/messages", messageController.CreateMessage)
+    api := router.Group("/api")
+    {
+        api.GET("/messages", messageController.GetMessages)
+        api.POST("/messages", messageController.CreateMessage)
+    }
     
     return router
 }
