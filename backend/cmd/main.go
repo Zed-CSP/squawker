@@ -2,20 +2,33 @@ package main
 
 import (
 	"log"
+	"os"
 	"squawker-backend/internal/api"
+	"squawker-backend/internal/config"
 	"squawker-backend/internal/database"
 )
 
 func main() {
+	// Load environment variables
+	config.LoadEnv()
+
 	// Initialize database
-	if err := database.InitDB(); err != nil {
+	db, err := database.InitDB()
+	if err != nil {
 		log.Fatal("Failed to initialize database:", err)
 	}
+	defer db.Close()
+		
+	// Get port from Heroku environment
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
-	router := api.SetupRouter()
-
-	log.Println("Server starting on :8080...")
-	if err := router.Run(":8080"); err != nil {
+	// Setup and run the server
+	router := api.SetupRouter(db)
+	log.Printf("Server starting on port %s...", port)
+	if err := router.Run(":" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }

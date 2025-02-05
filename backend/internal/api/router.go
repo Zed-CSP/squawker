@@ -1,56 +1,54 @@
 package api
 
 import (
+	"database/sql"
 	"squawker-backend/internal/controllers"
 	"squawker-backend/internal/middleware"
-	"squawker-backend/internal/models"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter() *gin.Engine {
+func SetupRouter(db *sql.DB) *gin.Engine {
 	router := gin.Default()
 
-	// Global middleware
-	router.Use(middleware.ErrorHandler())
+	// Configure CORS
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowCredentials: true,
+	}))
 
-	// CORS middleware
-	router.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	})
-
+	// Initialize controllers with db connection
+	authController := controllers.NewAuthController(db)
 	messageController := controllers.NewMessageController()
-	userController := controllers.NewUserController()
 
-	// Public routes with validation
-	router.POST("/register",
-		middleware.ValidateRequest(models.RegisterRequest{}),
-		userController.Register,
-	)
-	router.POST("/login",
-		middleware.ValidateRequest(models.LoginRequest{}),
-		userController.Login,
-	)
+	// Public routes
+	router.GET("/ws", HandleWebSocket)
 
-	// Protected routes
+	// Auth routes
+	auth := router.Group("/api/auth")
+	{
+		auth.POST("/register", authController.Register)
+		auth.POST("/login", authController.Login)
+		auth.POST("/refresh", middleware.AuthMiddleware(), authController.RefreshToken)
+	}
+
+	// Message routes - protected by auth middleware
 	api := router.Group("/api")
 	api.Use(middleware.AuthMiddleware())
 	{
 		api.GET("/messages", messageController.GetMessages)
-		api.POST("/messages",
-			middleware.ValidateRequest(models.CreateMessageRequest{}),
-			messageController.CreateMessage,
-		)
+		api.POST("/messages", messageController.CreateMessage)
 	}
+
+	// Add a health check endpoint
+	router.GET("/api/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+		})
+	})
 
 	return router
 }

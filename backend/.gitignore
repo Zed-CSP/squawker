@@ -1,5 +1,6 @@
 # Binaries for programs and plugins
 *.exe
+*.exe~
 *.dll
 *.so
 *.dylib
@@ -10,13 +11,18 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the `#` to include it)
-# vendor/
+# Dependency directories (remove the comment below to include it)
+vendor/
 
-# Configuration files
+# Environment variables
 .env
-config.yaml
 
-# Database stores
-*.db
-*.sql
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo 
+
+# General
+.DS_Store
+Thumbs.db
