@@ -1,21 +1,55 @@
 .create-message {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    border: 1px solid #e1e8ed;
-    border-radius: 12px;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--neon-blue);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 249, 0.1);
+    margin: 1rem 0;
 }
 
-.create-message textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 12px;
-    border: 1px solid #e1e8ed;
-    border-radius: 8px;
-    resize: vertical;
-    font-size: 16px;
-    margin-bottom: 10px;
+.message-input {
+    flex: 1;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--neon-blue);
+    border-radius: 4px;
+    color: white;
+    font-family: 'Courier New', monospace;
+}
+
+.message-input:focus {
+    outline: none;
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.send-button {
+    padding: 0.8rem 1.5rem;
+    background: rgba(0, 255, 249, 0.1);
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.send-button:hover {
+    background: rgba(0, 255, 249, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 249, 0.3);
+}
+
+.send-button:active {
+    transform: translateY(1px);
+}
+
+.send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .message-footer {
@@ -30,26 +64,6 @@
 
 .char-count.warning {
     color: #ffad1f;
-}
-
-button {
-    background: #1da1f2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-button:disabled {
-    background: #9bd1f9;
-    cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-    background: #1991da;
 }
 
 .error {

@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.user-status {
+    color: var(--neon-blue);
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--text-glow);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--neon-blue);
+    border-radius: 4px;
+    background: rgba(0, 255, 249, 0.1);
+}

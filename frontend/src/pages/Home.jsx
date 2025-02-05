@@ -4,7 +4,7 @@ import CreateMessage from '../components/CreateMessage'
 import AuthModal from '../components/AuthModal'
 import './Home.css'
 
-export default function Home() {
+export default function Home({ user, setUser }) {
     const [messages, setMessages] = useState([])
     const [error, setError] = useState(null)
     const [showAuthModal, setShowAuthModal] = useState(false)
@@ -46,14 +46,12 @@ export default function Home() {
     }, [isConnected, wsError])
 
     const handleCreateMessage = async (content) => {
-        console.log('Attempting to create message:', content) // Debug log
         const token = localStorage.getItem('token')
+        console.log('Token being sent:', token) // Debug log
         
-        if (!token) {
-            console.log('No token found, should show modal') // Debug log
+        if (!token || !user) {
             setPendingMessage(content)
             setShowAuthModal(true)
-            console.log('showAuthModal set to:', true) // Debug log
             return
         }
 
@@ -68,15 +66,30 @@ export default function Home() {
             })
 
             if (response.status === 401) {
-                console.log('Unauthorized response, should show modal') // Debug log
-                setShowAuthModal(true)
-                setPendingMessage(content)
+                // Try to verify token first
+                const verifyResponse = await fetch('/api/auth/verify', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+                if (verifyResponse.status === 401) {
+                    // Only clear if token is actually invalid
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('user')
+                    setUser(null)
+                    setShowAuthModal(true)
+                    setPendingMessage(content)
+                }
                 return
             }
 
             if (!response.ok) {
                 throw new Error('Failed to create message')
             }
+
+            // Clear pending message on success
+            setPendingMessage(null)
         } catch (err) {
             setError(err.message)
         }
@@ -88,9 +101,9 @@ export default function Home() {
     }, [showAuthModal])
 
     const handleAuthSuccess = async (data) => {
-        console.log('Auth success:', data) // Debug log
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
+        setUser(data.user)
         
         if (pendingMessage) {
             await handleCreateMessage(pendingMessage)
