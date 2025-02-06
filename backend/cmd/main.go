@@ -35,9 +35,11 @@ func main() {
 
 	// Initialize handlers
 	wsHandler := handlers.NewWebSocketHandler()
+	healthHandler := handlers.NewHealthHandler()
 
 	// Routes
 	r.GET("/ws", wsHandler.HandleWebSocket)
+	r.GET("/health", healthHandler.CheckHealth)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
