@@ -1,4 +1,4 @@
-# 🎤 Freemium Speech Platform
+# The first outwardly "Freemium Speech" Platform 🎤
 
 > Because social media wasn’t stressful enough—now it’s got in-app purchases. 
 
