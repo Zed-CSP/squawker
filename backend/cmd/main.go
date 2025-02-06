@@ -5,6 +5,7 @@ import (
 	// "os"
 
 	"squawker-backend/config"
+	"squawker-backend/internal/controllers"
 	"squawker-backend/internal/handlers"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ import (
 func init() {
 	config.LoadEnv()
 	config.ConnectToDB()
+	config.SyncDB()
 	// // Initialize database
 	// db, err := database.InitDB()
 	// if err != nil {
@@ -45,6 +47,9 @@ func main() {
 			"message": "pong",
 		})
 	})
+
+	r.POST("/signup", controllers.SignUp)
+	//r.POST("/login", controllers.Login)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
