@@ -48,6 +48,6 @@ It’s an **absurd social experiment** built with **Go, WebSockets, and Vite** f
 ## 📜 License
 All rights reserved to common sense. **Use this at your own risk.**  
 
-###In fact, DO NOT USE THIS###
+### In fact, DO NOT USE THIS
 
 all purchases are a friendly donation to the developer's coffee fund.
