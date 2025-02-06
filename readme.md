@@ -5,7 +5,9 @@
 *(Relax, it’s just a joke.)*
 
 ## 🤔 What is this?
-The **Freemium Speech Platform** is an experimental chat application modeled in a **true Ferengi spirit**, where **users get ONE free (restrictive char count) post per day.**  
+The **Freemium Speech Platform** is an experimental chat application modeled in a **true Ferengi spirit**, 
+where **users get ONE free (restrictive char count) post per day.**  
+
 Want to say more? **Put your money where your mouth is.** 💰
 
 After all, **if people are going to scream over each other into the digital void anyway, why not profit?**  
@@ -44,4 +46,5 @@ This is **not** a real business model (yet).
 It’s an **absurd social experiment** built with **Go, WebSockets, and Vite** for fun.  
 
 ## 📜 License
-All rights reserved to common sense. **Use this at your own risk.**  all purchases are a friendly donation to the developer's coffee fund.
+All rights reserved to common sense. **Use this at your own risk.**  
+all purchases are a friendly donation to the developer's coffee fund.
