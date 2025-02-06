@@ -27,7 +27,7 @@ After all, **if people are going to scream over each other into the digital void
 ✅ **Stripe Payments** – Secure and easy payments.  
 
 ## 🎭 Is this a joke?
-**Yes.**  
+### Yes.
 But also a **fun engineering challenge** to build a scalable **real-time chat system**.  
 
 ## ⚡ Why This (Probably) Won’t Work
