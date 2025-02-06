@@ -1,6 +1,7 @@
-package initializers
+package config
 
 import (
+	"log"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -11,10 +12,20 @@ var DB *gorm.DB
 
 func ConnectToDB() *gorm.DB {
 	var err error
-	dsn := os.Getenv("DB_URL")
-	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("Failed to connect to database")
+	dsn := os.Getenv("DATABASE_URL")
+
+
+	if dsn == "" {
+		log.Fatal("DATABASE_URL environment variable not set")
 	}
-	return db
+
+	log.Printf("Attempting to connect to database...")
+
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	log.Println("Successfully connected to database")
+	return DB
 }
