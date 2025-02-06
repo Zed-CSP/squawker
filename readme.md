@@ -1,6 +1,8 @@
 # 🎤 Freemium Speech Platform
 
-> Because social media wasn’t stressful enough—now it’s got in-app purchases. *(Relax, it’s just a joke.)*
+> Because social media wasn’t stressful enough—now it’s got in-app purchases. 
+
+*(Relax, it’s just a joke.)*
 
 ## 🤔 What is this?
 The **Freemium Speech Platform** is an experimental chat application modeled in a **true Ferengi spirit**, where **users get ONE free (restrictive char count) post per day.**  
