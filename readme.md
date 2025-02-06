@@ -37,7 +37,7 @@ But also a **fun engineering challenge** to build a scalable **real-time chat sy
 - **A new kind of influence model** – Who can say the most with the least?  
 
 ## 🏗️ Work in Progress
-- **Paywalls for punctuation** – Because clarity is now a privilege.  
+- **Paywalls for punctuation** – Because clarity is now a privilege. Just be glad I havent made vowels subscription based... Yet
 - **Post with "volume"** - our premium currency that makes your post outrank others for a fleeting period of time. 
 - **casino games for speech currency** – flirt with the house edge, cuz you have a lot to say  
 
