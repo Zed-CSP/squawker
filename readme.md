@@ -42,8 +42,9 @@ But also a **fun engineering challenge** to build a scalable **real-time chat sy
 - **casino games for speech currency** – flirt with the house edge, cuz you have a lot to say  
 
 ## 🚨 Disclaimer
-This is **not** a real business model (yet).  
+This is **not** a real business model.  
 It’s an **absurd social experiment** built with **Go, WebSockets, and Vite** for fun.  
+### No inherent political statements or references are being made here, its for lolz
 
 ## 📜 License
 All rights reserved to common sense. **Use this at your own risk.**  
