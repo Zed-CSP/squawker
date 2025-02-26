@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import Home from './pages/Home'
 import './App.css'
-import GridHorizon from './components/GridHorizon'
-import DigitalRain from './components/DigitalRain'
+import GridHorizon from './components/ui/GridHorizon'
+import DigitalRain from './components/ui/DigitalRain'
+import CyberpunkLogo from './components/ui/CyberpunkLogo'
 
 function App() {
     const [user, setUser] = useState(null)
@@ -25,7 +26,7 @@ function App() {
             <GridHorizon />
             <DigitalRain />
             <header className="app-header">
-                <h1>Squawker</h1>
+                <CyberpunkLogo />
                 {user && (
                     <div className="user-status">
                         <span>@{user.username}</span>

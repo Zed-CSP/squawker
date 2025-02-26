@@ -1,52 +1,3 @@
-:root {
-    --neon-blue: #00fff9;
-    --neon-pink: #ff00ff;
-    --neon-purple: #b026ff;
-    --dark-bg: #0a0a0f;
-    --card-bg: #1a1a24;
-    --text-glow: 0 0 10px rgba(0, 255, 249, 0.5);
-    --hover-glow: 0 0 30px rgba(0, 255, 249, 0.3);
-}
-
-.home {
-    margin: 0 auto;
-    padding: 10px;
-    width: 98%;
-    background: transparent !important;
-    height: 70vh; /* Adjust based on header height */
-    display: flex;
-    flex-direction: column;
-}
-
-.connection-status {
-    margin-bottom: 10px;
-}
-
-.feed-container {
-    background: rgba(26, 26, 36, 0.9);
-    border: 1px solid var(--neon-blue);
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 255, 249, 0.2);
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(10px);
-    width: 100%;
-    flex: 1;
-    max-height: calc(100vh - 220px); /* Adjust to fit within viewport */
-}
-
-.messages-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px 40px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-    gap: 20px;
-    align-items: start;
-    max-height: calc(100vh - 300px); /* Ensure it doesn't overflow */
-}
-
 .message-card {
     background: var(--card-bg);
     border: 1px solid var(--neon-blue);
@@ -91,6 +42,7 @@
     box-shadow: 0 0 25px rgba(0, 255, 249, 0.2);
     border-color: var(--neon-pink);
     background: linear-gradient(145deg, var(--card-bg), rgba(26, 26, 36, 0.95));
+    animation: borderPulse 2s infinite;
 }
 
 .message-card:hover::before {
@@ -102,19 +54,126 @@
 .message-card:hover::after {
     opacity: 0.8;
     box-shadow: 0 0 15px var(--neon-pink);
+    animation: cornerPulse 2s infinite;
 }
 
 .message-card:hover .username {
+    animation: glitch 1s linear infinite;
+    cursor: pointer;
     color: var(--neon-pink);
     text-shadow: 0 0 15px var(--neon-pink);
     letter-spacing: 2px;
 }
 
 .message-card:hover .content {
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 5px rgba(0, 255, 249, 0.5);
+    animation: textFlicker 4s linear infinite;
 }
 
-/* Add glitch effect on hover */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.username {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--neon-blue);
+    font-size: 1.1em;
+    text-shadow: var(--text-glow);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.content {
+    margin: 0;
+    line-height: 1.6;
+    color: #fff;
+    word-wrap: break-word;
+    font-size: 1em;
+    padding: 0 8px;
+    font-family: 'Courier New', monospace;
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 2px rgba(0, 255, 249, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.content::selection {
+    background: rgba(255, 0, 255, 0.3);
+    color: var(--neon-blue);
+}
+
+.content::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 8px;
+    width: 98%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    opacity: 0.3;
+}
+
+.time {
+    color: rgba(0, 255, 249, 0.7);
+    font-size: 0.9em;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.message-card:hover .time {
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+    animation: borderPulse 2s infinite;
+}
+
+@keyframes timePulse {
+    0% {
+        color: var(--neon-blue);
+        text-shadow: 0 0 5px var(--neon-blue);
+    }
+    50% {
+        color: var(--neon-pink);
+        text-shadow: 0 0 10px var(--neon-pink);
+    }
+    100% {
+        color: var(--neon-blue);
+        text-shadow: 0 0 5px var(--neon-blue);
+    }
+}
+
+.message-card:hover .time {
+    animation: timePulse 2s infinite;
+}
+
+.date {
+    color: var(--neon-pink);
+    font-size: 0.9em;
+    padding: 4px 12px;
+    background: rgba(255, 0, 255, 0.1);
+    border-radius: 2px;
+    border: 1px solid var(--neon-pink);
+    font-family: 'Courier New', monospace;
+}
+
+/* Fix username animation */
 @keyframes glitch {
     0% {
         text-shadow: 0.05em 0 0 var(--neon-pink), -0.05em -0.025em 0 var(--neon-blue),
@@ -146,9 +205,19 @@
     }
 }
 
-.username:hover {
+.message-card:hover .username {
     animation: glitch 1s linear infinite;
     cursor: pointer;
+    color: var(--neon-pink);
+    text-shadow: 0 0 15px var(--neon-pink);
+    letter-spacing: 2px;
+}
+
+/* You can also add this for individual username hover effect */
+.username:hover {
+    animation: glitch 0.5s linear infinite !important;
+    color: var(--neon-purple) !important;
+    text-shadow: 0 0 20px var(--neon-purple) !important;
 }
 
 /* Add scan line effect */
@@ -215,133 +284,50 @@
     }
 }
 
-.message-card:hover {
-    animation: borderPulse 2s infinite;
+@keyframes textFlicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 4px rgba(0, 255, 249, 0.3);
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+        opacity: 0.8;
+        text-shadow: 0 0 8px rgba(0, 255, 249, 0.5);
+    }
 }
 
-.message-card:hover::after {
-    opacity: 0.8;
-    animation: cornerPulse 2s infinite;
+/* Add a data corruption effect on hover */
+.message-card:hover .content::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 8px;
+    width: 100%;
+    height: 100%;
+    background-size: 200% 100%;
+    background-position: 0 0;
+    mix-blend-mode: difference;
+    animation: dataCorruption 3s linear infinite;
+    opacity: 0.1;
+    pointer-events: none;
 }
 
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-}
-
-.username {
-    font-family: 'Courier New', monospace;
-    font-weight: 600;
-    color: var(--neon-blue);
-    font-size: 1.1em;
-    text-shadow: var(--text-glow);
-    letter-spacing: 1px;
-    white-space: nowrap;
-}
-
-.time {
-    color: rgba(0, 255, 249, 0.7);
-    font-size: 0.9em;
-    font-family: 'Courier New', monospace;
-    white-space: nowrap;
-}
-
-.date {
-    color: var(--neon-pink);
-    font-size: 0.9em;
-    padding: 4px 12px;
-    background: rgba(255, 0, 255, 0.1);
-    border-radius: 2px;
-    border: 1px solid var(--neon-pink);
-    font-family: 'Courier New', monospace;
-}
-
-.content {
-    margin: 0;
-    line-height: 1.6;
-    color: #fff;
-    word-wrap: break-word;
-    font-size: 1.1em;
-    padding: 0 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    flex: 1;
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: var(--neon-blue);
-    text-shadow: var(--text-glow);
-    font-family: 'Courier New', monospace;
-    letter-spacing: 2px;
-}
-
-.error {
-    text-align: center;
-    padding: 20px;
-    color: var(--neon-pink);
-    background: rgba(255, 0, 255, 0.1);
-    border: 1px solid var(--neon-pink);
-    border-radius: 4px;
-    margin: 20px 0;
-    font-family: 'Courier New', monospace;
-}
-
-.no-messages {
-    text-align: center;
-    padding: 40px;
-    color: var(--neon-blue);
-    font-style: italic;
-    text-shadow: var(--text-glow);
-    font-family: 'Courier New', monospace;
-}
-
-/* Custom scrollbar */
-.messages-container::-webkit-scrollbar {
-    width: 10px;
-    background: var(--dark-bg);
-}
-
-.messages-container::-webkit-scrollbar-track {
-    background: rgba(0, 255, 249, 0.1);
-    border-radius: 0;
-}
-
-.messages-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--neon-blue), var(--neon-pink));
-    border-radius: 0;
-}
-
-.messages-container::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(var(--neon-pink), var(--neon-blue));
-}
-
-/* Animation for loading state */
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-.loading {
-    animation: pulse 2s infinite;
-}
-
-/* Update App.css to ensure full-width layout */
-:root {
-    --app-max-width: 1400px;
+@keyframes dataCorruption {
+    0% { 
+        background-position: 0 0;
+        opacity: 0.2;
+    }
+    25% {
+        opacity: 0.3;
+    }
+    50% { 
+        background-position: 100% 0;
+        opacity: 0.4;
+    }
+    75% {
+        opacity: 0.3;
+    }
+    100% { 
+        background-position: 200% 0;
+        opacity: 0.2;
+    }
 } 

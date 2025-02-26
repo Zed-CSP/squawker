@@ -71,15 +71,23 @@
   }
 }
 
-/* Add stars in the sky */
-.grid-horizon::after {
-  content: '';
+/* Stars in the sky - now starting at horizon and moving upward */
+.stars-field {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; /* Full viewport height */
-  background-color: rgba(10, 10, 15, 0.5); /* Dark background for the entire area */
+  height: 33.33vh; /* Only cover the area above the horizon */
+  overflow: hidden;
+  z-index: -16;
+}
+
+.stars-layer {
+  position: absolute;
+  bottom: 0; /* Start at the horizon */
+  left: 0;
+  width: 100%;
+  height: 200%; /* Make it taller so stars can move up */
   background-image: 
     radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
@@ -89,7 +97,27 @@
     radial-gradient(1px 1px at 160px 120px, rgba(255, 255, 255, 0.6), transparent);
   background-repeat: repeat;
   background-size: 200px 200px;
-  z-index: -16;
+  animation: stars-scroll 60s linear infinite; /* Slow upward movement */
+}
+
+@keyframes stars-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%); /* Move up by half the height */
+  }
+}
+
+/* Dark background for the sky area */
+.sky-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 33.33vh; /* Only cover the area above the horizon */
+  background-color: rgba(10, 10, 15, 0.5);
+  z-index: -17;
 }
 
 /* Make sure the background of the home container is transparent */
