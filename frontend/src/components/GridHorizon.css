@@ -1,0 +1,103 @@
+.grid-horizon {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -15;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 1500px;
+}
+
+.grid-floor {
+  position: absolute;
+  top: 33.33vh; /* Position at 1/3 of viewport height */
+  left: -50%;
+  width: 200%;
+  height: 200vh; /* Make it much taller to ensure it fills the screen */
+  background: 
+    linear-gradient(to top, rgba(10, 10, 15, 0.9), transparent 80%),
+    linear-gradient(90deg, rgba(176, 38, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(rgba(176, 38, 255, 0.5) 1px, transparent 1px);
+  background-size: 100% 100%, 100px 100px, 100px 100px;
+  transform-origin: center top;
+  transform: rotateX(75deg); /* Increased angle for more distance */
+  animation: grid-move 10s linear infinite; /* Faster animation */
+}
+
+.horizon-line {
+  position: absolute;
+  top: 33.33vh; /* Position at 1/3 of viewport height */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 0, 255, 0.5) 20%, 
+    rgba(255, 0, 255, 0.8) 50%, 
+    rgba(255, 0, 255, 0.5) 80%, 
+    transparent 100%);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.7);
+  z-index: -14;
+}
+
+/* Add vertical lines that converge to the horizon */
+.grid-vertical-lines {
+  position: absolute;
+  top: 33.33vh; /* Position at 1/3 of viewport height */
+  left: 0;
+  width: 100%;
+  height: 200vh; /* Make it much taller to ensure it fills the screen */
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent,
+    transparent calc(8% - 1px),
+    rgba(176, 38, 255, 0.3) calc(8% - 1px),
+    rgba(176, 38, 255, 0.3) 8%
+  );
+  transform-origin: center top;
+  transform: rotateX(75deg); /* Match the grid-floor angle */
+  z-index: -14;
+}
+
+/* Add animated movement to the grid - moving downward */
+@keyframes grid-move {
+  from {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 0 0, 0 200px, 0 200px; /* Increased movement distance */
+  }
+}
+
+/* Add stars in the sky */
+.grid-horizon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  background-color: rgba(10, 10, 15, 0.5); /* Dark background for the entire area */
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 50px 160px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 160px 120px, rgba(255, 255, 255, 0.6), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  z-index: -16;
+}
+
+/* Make sure the background of the home container is transparent */
+.home {
+  background: transparent !important;
+}
+
+/* Ensure the grid is visible behind all content */
+body {
+  background-color: var(--dark-bg);
+} 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Home from './pages/Home'
 import './App.css'
+import GridHorizon from './components/GridHorizon'
+import DigitalRain from './components/DigitalRain'
 
 function App() {
     const [user, setUser] = useState(null)
@@ -20,6 +22,8 @@ function App() {
 
     return (
         <div className="App">
+            <GridHorizon />
+            <DigitalRain />
             <header className="app-header">
                 <h1>Squawker</h1>
                 {user && (

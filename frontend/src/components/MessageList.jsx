@@ -1,46 +1,32 @@
-import { useState, useEffect } from 'react'
+import React from 'react'
 import './MessageList.css'
 
-export default function MessageList() {
-    const [messages, setMessages] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-
-    useEffect(() => {
-        fetchMessages()
-    }, [])
-
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch('/api/messages')
-            if (!response.ok) {
-                throw new Error('Failed to fetch messages')
-            }
-            const data = await response.json()
-            setMessages(data)
-            setLoading(false)
-        } catch (err) {
-            setError(err.message)
-            setLoading(false)
-        }
+function formatDate(dateString) {
+    try {
+        const date = new Date(dateString)
+        return date.toLocaleString()
+    } catch (error) {
+        console.error('Error formatting date:', error, dateString)
+        return 'Just now'
     }
+}
 
-    if (loading) return <div className="loading">Loading messages...</div>
-    if (error) return <div className="error">{error}</div>
-
+export default function MessageList({ messages }) {
     return (
         <div className="message-list">
-            {messages.map((message) => (
-                <div key={message.id} className="message-card">
-                    <div className="message-header">
-                        <span className="username">@{message.username}</span>
-                        <span className="date">
-                            {new Date(message.createdAt).toLocaleDateString()}
-                        </span>
+            {messages.length === 0 ? (
+                <div className="no-messages">No messages yet. Be the first to post!</div>
+            ) : (
+                messages.map((message) => (
+                    <div key={message.id} className="message">
+                        <div className="message-header">
+                            <span className="username">@{message.username}</span>
+                            <span className="timestamp">{formatDate(message.createdAt)}</span>
+                        </div>
+                        <div className="message-content">{message.content}</div>
                     </div>
-                    <p className="content">{message.content}</p>
-                </div>
-            ))}
+                ))
+            )}
         </div>
     )
 } 

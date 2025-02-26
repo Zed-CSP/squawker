@@ -7,6 +7,7 @@ import (
 	"squawker-backend/config"
 	"squawker-backend/internal/controllers"
 	"squawker-backend/internal/handlers"
+	"squawker-backend/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +40,9 @@ func main() {
 	wsHandler := handlers.NewWebSocketHandler()
 	healthHandler := handlers.NewHealthHandler()
 
+	// Set the WebSocket handler for the message controller
+	controllers.SetWebSocketHandler(wsHandler)
+
 	// Routes
 	r.GET("/ws", wsHandler.HandleWebSocket)
 	r.GET("/health", healthHandler.CheckHealth)
@@ -48,8 +52,24 @@ func main() {
 		})
 	})
 
+	// Auth routes
+	auth := r.Group("/api/auth")
+	{
+		auth.POST("/register", controllers.SignUp)
+		auth.POST("/login", controllers.Login)
+		auth.GET("/verify", middleware.RequireAuth, controllers.VerifyToken)
+	}
+
+	// Message routes - require authentication
+	messages := r.Group("/api/messages")
+	messages.Use(middleware.RequireAuth)
+	{
+		messages.GET("", controllers.GetMessages)
+		messages.POST("", controllers.CreateMessage)
+	}
+
+	// Keep the original route for backward compatibility
 	r.POST("/signup", controllers.SignUp)
-	//r.POST("/login", controllers.Login)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

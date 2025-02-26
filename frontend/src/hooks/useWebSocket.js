@@ -1,57 +1,53 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 export function useWebSocket(url) {
-    const [socket, setSocket] = useState(null)
     const [isConnected, setIsConnected] = useState(false)
     const [error, setError] = useState(null)
+    const socketRef = useRef(null)
 
-    useEffect(() => {
-        let ws = null
-        let reconnectTimer = null
+    const connect = useCallback(() => {
+        try {
+            const socket = new WebSocket(url)
+            socketRef.current = socket
 
-        const connect = () => {
-            console.log('Attempting WebSocket connection to:', url)
-            ws = new WebSocket(url)
-
-            ws.onopen = () => {
-                console.log('WebSocket connected successfully')
+            socket.onopen = () => {
+                console.log('WebSocket connection established')
                 setIsConnected(true)
                 setError(null)
             }
 
-            ws.onclose = (event) => {
-                console.log('WebSocket disconnected:', event.code, event.reason)
+            socket.onclose = (event) => {
+                console.log('WebSocket connection closed:', event)
                 setIsConnected(false)
-                // Try to reconnect after 3 seconds
-                reconnectTimer = setTimeout(connect, 3000)
+                
+                // Attempt to reconnect after a delay
+                setTimeout(() => {
+                    if (socketRef.current) {
+                        connect()
+                    }
+                }, 3000)
             }
 
-            ws.onerror = (error) => {
+            socket.onerror = (error) => {
                 console.error('WebSocket error:', error)
-                setError('WebSocket error: ' + error.message)
+                setError('WebSocket connection error')
             }
-
-            setSocket(ws)
-        }
-
-        connect()
-
-        // Cleanup on unmount
-        return () => {
-            if (ws) {
-                ws.close()
-            }
-            if (reconnectTimer) {
-                clearTimeout(reconnectTimer)
-            }
+        } catch (err) {
+            console.error('Error setting up WebSocket:', err)
+            setError(err.message)
         }
     }, [url])
 
-    const sendMessage = useCallback((type, payload) => {
-        if (socket && isConnected) {
-            socket.send(JSON.stringify({ type, payload }))
+    useEffect(() => {
+        connect()
+        
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.close()
+                socketRef.current = null
+            }
         }
-    }, [socket, isConnected])
+    }, [connect])
 
-    return { socket, isConnected, error, sendMessage }
+    return { socket: socketRef.current, isConnected, error }
 } 

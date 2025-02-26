@@ -1,0 +1,39 @@
+.digital-rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: transparent;
+}
+
+.rain-column {
+  position: absolute;
+  top: -100px;
+  color: rgba(0, 255, 249, 0.5);
+  font-family: 'Courier New', monospace;
+  font-size: 24px;
+  line-height: 1.2;
+  text-shadow: 0 0 6px var(--neon-blue);
+  animation: digital-rain linear infinite;
+}
+
+@keyframes digital-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.5;
+  }
+  95% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
